@@ -25,24 +25,26 @@ end
 
 class Policy < Conduct
 
-  can? :hack, :all, -> (klass) do
+  can :hack, :all, -> (klass) do
     !user.admin? && klass.persisted?
   end
 
-  can? :manage, :all, -> (klass) do
+  can :manage, :all, -> (klass) do
     user.admin? && klass.new_record?
   end
 
-  can? :edit, User do |u|
-    u.id == user.id
+  can :edit, User do |u, opts|
+    u.id == user.id && opts[:ip] == "localhost"
   end
 
-  can? :create, Post, -> (klass) do
+  can :create, Post, -> (klass) do
     user.admin? && klass.new_record?
   end
 
-  can? :bomb, Post do |post|
+  can :bomb, Post do |post|
     post.id
   end
+
+  can :delete, Post, collection: true
 
 end

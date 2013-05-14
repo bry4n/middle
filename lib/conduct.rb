@@ -11,12 +11,13 @@ class Conduct
       "Result value is not boolean type."
     end
   end
+
   cattr_accessor :user, :debug
 
-  def self.can?(action, subject, *args, &block)
+  def self.can(action, subject, *args, &block)
     options = args.extract_options!
     block = args.pop if args.last.kind_of?(Proc)
-    rules << Rule.new(action, subject, options, block)
+    rules << Rule.new(action, subject, options, &block)
   end
 
   def self.rules
@@ -33,9 +34,7 @@ class Conduct
       puts " ** No rule match for #{action} and #{subject.inspect}" if debug?
       return false
     end
-    rule.call(subject)
-    raise Conduct::NoBooleanValue unless rule.boolean_value?
-    rule.result
+    rule.call(subject, options)
   end
 
   def cannot?(*args)

@@ -16,7 +16,7 @@ describe Conduct do
   end
 
   it "should be true" do
-    policy.can?(:edit, user).should be_true
+    policy.can?(:edit, user, {ip: "localhost"}).should be_true
   end
 
   it "should not create persisted user" do
