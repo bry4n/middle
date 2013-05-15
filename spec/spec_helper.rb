@@ -1,25 +1,29 @@
 $:.unshift "lib"
+$:.unshift "spec"
 
 require "conduct"
 require 'rspec/autorun'
-require 'toystore'
+require 'hashie'
+require 'mock_class'
 require 'pp'
 
 
-class User
 
-  include Toy::Store
 
-  attribute :admin, Boolean, default: true
+class User < MockClass
+
+  property :admin, default: true
+
+  def admin?
+    self.admin == true
+  end
 
 end
 
-class Post
-  include Toy::Store
+class Post < MockClass
 end
 
-class Company
-  include Toy::Store
+class Company < MockClass
 end
 
 

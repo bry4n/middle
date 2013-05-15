@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem 'activesupport'
+gemspec
 
 group :test do
-  gem "toystore"
+  gem "hashie"
   gem "rspec"
 end
