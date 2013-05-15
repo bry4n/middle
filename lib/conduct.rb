@@ -1,18 +1,34 @@
 $:.unshift "lib"
 
-require 'active_support/core_ext/class/attribute_accessors'
-require 'active_support/core_ext/object/blank'
+unless defined?(ActiveSupport)
+  require 'active_support/core_ext/class/attribute_accessors'
+  require 'active_support/core_ext/object/blank'
+end
+
 require "conduct/rule"
+require "conduct/action_controller"
 
 class Conduct
 
-  class NoBooleanValue < Exception;
+  class NoBooleanValue < Exception
     def message
       "Result value is not boolean type."
     end
   end
 
-  cattr_accessor :user, :debug
+  class NoCondition < Exception
+    def message
+      "Must use block/proc while collection is enabled"
+    end
+  end
+
+  class NoCollection < Exception
+    def message
+      "The subject is not collection!"
+    end
+  end
+
+  cattr_accessor :current_user, :debug
 
   def self.can(action, subject, *args, &block)
     options = args.extract_options!
@@ -25,7 +41,7 @@ class Conduct
   end
 
   def initialize(user)
-    @user = self.class.user = user
+    @current_user = self.class.current_user = user
   end
 
   def can?(action, subject, options = {})
@@ -45,8 +61,8 @@ class Conduct
     @rules ||= self.class.rules
   end
 
-  def user
-    @user
+  def current_user
+    @current_user
   end
 
   private

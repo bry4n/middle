@@ -12,7 +12,7 @@ describe Conduct do
 
   # policy
   it "should have current_user object" do
-    policy.user.should_not be_nil
+    policy.current_user.should_not be_nil
   end
 
   it "should be true" do
@@ -40,6 +40,20 @@ describe Conduct do
 
   it "should throw error" do
     expect { policy.can?(:bomb, Post.new) }.to raise_error(Conduct::NoBooleanValue)
+  end
+
+  it "should delete persisted records" do
+    posts = ([Post.create] * 5)
+    policy.can?(:delete, posts).should be_true
+  end
+
+  it "should raise if collection is enabled and condition is empty" do
+    posts = ([Post.create] * 5)
+    expect { policy.can?(:raise, posts) }.to raise_error(Conduct::NoCondition)
+  end
+
+  it "should raise if collection is disabled and condition is enabled" do
+    expect { policy.can?(:delete, Class.new) }.to raise_error(Conduct::NoCollection)
   end
 
 end
