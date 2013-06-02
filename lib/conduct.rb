@@ -1,8 +1,8 @@
 $:.unshift "lib"
 
 unless defined?(ActiveSupport)
-  require 'active_support/core_ext/class/attribute_accessors'
-  require 'active_support/core_ext/object/blank'
+  require 'active_support/core_ext/class'
+  require 'active_support/core_ext/object'
 end
 
 require "conduct/rule"
@@ -28,7 +28,15 @@ class Conduct
     end
   end
 
-  cattr_accessor :current_user, :debug
+  #cattr_accessor :current_user, :debug
+
+  def self.current_user
+    @current_user
+  end
+
+  def self.current_user=(user)
+    @current_user = user
+  end
 
   def self.can(action, subject, *args, &block)
     options = args.extract_options!
