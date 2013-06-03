@@ -14,25 +14,32 @@ end
 
 # cancan
 class AbilityCanCan
+
   include CanCan::Ability
 
   def initialize(user = User.new)
+
     can :manage, User do |u|
       user.admin?
     end
+
   end
 
 end
 
 # pundit
 class AbilityPundit
+
   include Pundit
+
   def current_user
     @current_user ||= User.new
   end
+
 end
 
 class UserPolicy
+
   def initialize(current_user, user)
     @current_user = current_user
     @user = user
@@ -41,13 +48,18 @@ class UserPolicy
   def manage?
     @current_user.admin?
   end
+
 end
 
 # conduct
-class AbilityConduct < Conduct
+class AbilityConduct
+
+  include Conduct
+
   can :manage, User do |u|
     current_user.admin?
   end
+
 end
 
 Benchmark.bm(25) do |b|

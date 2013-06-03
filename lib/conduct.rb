@@ -1,6 +1,7 @@
 $:.unshift "lib"
 
 unless defined?(ActiveSupport)
+  require 'active_support/concern'
   require 'active_support/core_ext/class'
   require 'active_support/core_ext/object'
 end
@@ -8,44 +9,37 @@ end
 require "conduct/rule"
 require "conduct/action_controller"
 
-class Conduct
+module Conduct
+  extend ActiveSupport::Concern
 
-  class NoBooleanValue < Exception
-    def message
-      "Result value is not boolean type."
+  module ClassMethods
+
+    def current_user
+      @@current_user
     end
+
+    def current_user=(user)
+      @@current_user = user
+    end
+
+    def can(action, subject, *args, &block)
+      options = args.extract_options!
+      block = args.pop if args.last.kind_of?(Proc)
+      rules << Rule.new(action, subject, options, &block)
+    end
+
+    def rules
+      @@rules ||= []
+    end
+
   end
 
-  class NoCondition < Exception
-    def message
-      "Must use block/proc while collection is enabled"
-    end
-  end
-
-  class NoCollection < Exception
-    def message
-      "The subject is not collection!"
-    end
-  end
-
-  #cattr_accessor :current_user, :debug
-
-  def self.current_user
+  def current_user
     @current_user
   end
 
-  def self.current_user=(user)
-    @current_user = user
-  end
-
-  def self.can(action, subject, *args, &block)
-    options = args.extract_options!
-    block = args.pop if args.last.kind_of?(Proc)
-    rules << Rule.new(action, subject, options, &block)
-  end
-
-  def self.rules
-    @rules ||= []
+  def rules
+    @rules ||= self.class.rules
   end
 
   def initialize(user)
@@ -53,11 +47,8 @@ class Conduct
   end
 
   def can?(action, subject, options = {})
-    rule = find_relevant_rule_for(action, subject)
-    unless rule
-      puts " ** No rule match for #{action} and #{subject.inspect}" if debug?
-      return false
-    end
+    rule = find_rule_for(action, subject)
+    return false unless rule
     rule.call(subject, options)
   end
 
@@ -65,24 +56,13 @@ class Conduct
     !can?(*args)
   end
 
-  def rules
-    @rules ||= self.class.rules
-  end
-
-  def current_user
-    @current_user
-  end
-
   private
 
-  def find_relevant_rule_for(action, subject)
+  def find_rule_for(action, subject)
     rules.select do |rule|
-      rule.action == action && rule.match?(subject)
+      rule.match?(action, subject)
     end.first
   end
 
-  def debug?
-    self.class.debug
-  end
-
 end
+

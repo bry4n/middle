@@ -1,4 +1,4 @@
-class Conduct
+module Conduct
   class Rule
 
     attr_accessor :action, :subject, :options, :block, :result
@@ -13,8 +13,9 @@ class Conduct
       @result     = nil
     end
 
-    def match?(obj)
-      raise Conduct::NoCollection if collection? && !obj.respond_to?(:to_a)
+    def match?(action, obj)
+      return false unless self.action == action
+      raise "The subject is not collection!" if collection? && !obj.respond_to?(:to_a)
       if collection?
         obj.respond_to?(:to_a)
       else
@@ -29,12 +30,12 @@ class Conduct
 
     def call(obj, opts = {})
       if collection?
-        raise Conduct::NoCondition unless conditions?
+        raise "Must use block/proc when collection is used" unless conditions?
         @result = obj.to_a.all? {|o| block_call(o, opts) }
       else
         @result = block_call(obj, opts)
       end
-      raise Conduct::NoBooleanValue unless boolean_value?
+      raise "Result value is not a boolean type" unless boolean_value?
       @result
     end
 

@@ -5,7 +5,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 desc "Generate Benchmark report"
 task :benchmark do
-  system("cd benchmarks && ruby permission.rb")
+  system("cd benchmarks && ruby benchmark.rb")
 end
 
 desc "Start IRB session"

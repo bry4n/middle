@@ -1,4 +1,4 @@
-class Conduct
+module Conduct
   module ActionController
     module Helpers
 

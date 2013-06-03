@@ -21,8 +21,21 @@ class Post < MockClass; end
 
 class Company < MockClass; end
 
+module UserPolicies
 
-class Policy < Conduct
+  include Conduct
+
+  can :test, Post do |post|
+    current_user.admin?
+  end
+
+end
+
+class Ability
+
+  include Conduct
+
+  include UserPolicies
 
   can :hack, :all, -> (klass) do
     !current_user.admin? && klass.persisted?
