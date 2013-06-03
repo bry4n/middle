@@ -12,8 +12,9 @@ class User < MockClass
   attr_accessor :admin
 
   def initialize(*args)
-    super
-    @admin = true
+    options = args.extract_options!
+    @admin = options[:admin] || true
+    super(*args)
   end
 
   def admin?

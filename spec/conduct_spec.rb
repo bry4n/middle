@@ -36,12 +36,16 @@ describe Conduct do
     ability.cannot?(:create, Company.new).should be_true
   end
 
+  it "can manage all" do
+    ability.can?(:manage, User.new)
+  end
+
   it "can hack anything" do
-    pending
     post = Post.create
-    p post
     ability.can?(:hack, post).should be_false
-    ability = Ability.new(User.new(admin: false))
+    user_1 = User.new(admin: false)
+    user_1.admin = false
+    ability = Ability.new(user_1)
     ability.can?(:hack, post).should be_true
   end
 
@@ -57,10 +61,6 @@ describe Conduct do
   it "should raise if collection is enabled and condition is empty" do
     posts = ([Post.create] * 5)
     expect { ability.can?(:raise, posts) }.to raise_error(Exception)
-  end
-
-  it "should raise if collection is disabled and condition is enabled" do
-    expect { ability.can?(:delete, Class.new) }.to raise_error(Exception)
   end
 
 end

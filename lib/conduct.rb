@@ -41,12 +41,8 @@ module Conduct
 
   def can?(action, subject, options = {})
     method = find_method_for(action, subject)
-#    return false unless method
-    unless method
-      puts "#{method_name(action, subject)}: false"
-      return false
-    end
-    rule = send(method_name(action, subject))
+    return false unless method
+    rule = send(method)
     rule.call(subject, options)
   end
 
@@ -57,10 +53,12 @@ module Conduct
   private
 
   def find_method_for(action, subject)
-    case true
-    when respond_to?(method_name(action, subject)) then method_name(action, subject)
-    when respond_to?("_conduct_#{action}_all") then "_conduct_#{action}_all"
-    else false
+    if respond_to?(method_name(action, subject))
+      method_name(action, subject)
+    elsif respond_to?("_conduct_#{action}_all")
+      "_conduct_#{action}_all"
+    else
+      false
     end
   end
 
@@ -74,10 +72,15 @@ module Conduct
   end
 
   def original_class_name(subject)
-    unless subject.respond_to?(:ancestors)
-      subject.class.ancestors.first
+    return original_class_name(subject.first) if subject.is_a?(Array)
+    if subject.respond_to?(:model_name)
+      subject.model_name
+    elsif subject.class.respond_to?(:model_name)
+      subject.class.model_name
+    elsif subject.is_a?(Class)
+      subject
     else
-      subject.ancestors.first
+      subject.class
     end
   end
 
