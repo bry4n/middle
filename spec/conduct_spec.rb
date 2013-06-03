@@ -54,11 +54,11 @@ describe Conduct do
 
   it "should raise if collection is enabled and condition is empty" do
     posts = ([Post.create] * 5)
-    expect { ability.can?(:raise, posts) }.to raise_error(ArgumentError)
+    expect { ability.can?(:raise, posts) }.to raise_error(Exception)
   end
 
   it "should raise if collection is disabled and condition is enabled" do
-    expect { ability.can?(:delete, Class.new) }.to raise_error(ArgumentError)
+    expect { ability.can?(:delete, Class.new) }.to raise_error(Exception)
   end
 
 end
