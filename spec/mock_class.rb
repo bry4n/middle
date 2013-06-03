@@ -1,12 +1,18 @@
 require 'securerandom'
-require 'hashie'
 
-class MockClass < Hashie::Dash
+class MockClass
 
-  property :persisted, default: false
+  attr_accessor :persisted
 
   def self.create
-    new(persisted: true)
+    obj = new
+    obj.save
+    obj
+  end
+
+  def initialize(*args)
+    options = args.extract_options!
+    @persisted = options[:persisted] || false
   end
 
   def id

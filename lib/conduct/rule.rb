@@ -2,6 +2,7 @@ module Conduct
   class Rule
 
     attr_accessor :action, :subject, :options, :block, :result
+    attr_reader :name
 
     def initialize(action, subject, options = {}, &block)
       @action     = action
@@ -11,6 +12,11 @@ module Conduct
       @collection = options[:collection].presence || false
       @conditions = @collection && @block.present? || false
       @result     = nil
+      if collection?
+        @name       = "#{action}_#{subject.to_s.downcase}_collection"
+      else
+        @name       = "#{action}_#{subject.to_s.downcase}"
+      end
     end
 
     def match?(action, obj)

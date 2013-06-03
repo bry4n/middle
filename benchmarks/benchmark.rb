@@ -23,6 +23,11 @@ class AbilityCanCan
       user.admin?
     end
 
+    50.times do |i|
+      can :"manage_#{i}", User do |u|
+        user.admin?
+      end
+    end
   end
 
 end
@@ -49,6 +54,12 @@ class UserPolicy
     @current_user.admin?
   end
 
+  50.times do |i|
+    define_method "manage_#{i}?" do
+      @user.admin?
+    end
+  end
+
 end
 
 # conduct
@@ -60,15 +71,21 @@ class AbilityConduct
     current_user.admin?
   end
 
+  50.times do |i|
+    can "manage_#{i}", User do |u|
+      current_user.admin?
+    end
+  end
+
 end
 
 Benchmark.bm(25) do |b|
 
-  b.report("CanCan") do
-    1_000_000.times do
-      AbilityCanCan.new(User.new).can?(:manage, User.new)
-    end
-  end
+  #b.report("CanCan") do
+  #  1_000_000.times do
+  #    AbilityCanCan.new(User.new).can?(:manage, User.new)
+  #  end
+  #end
 
   b.report("Pundit") do
     1_000_000.times do

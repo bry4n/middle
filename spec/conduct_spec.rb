@@ -37,7 +37,9 @@ describe Conduct do
   end
 
   it "can hack anything" do
+    pending
     post = Post.create
+    p post
     ability.can?(:hack, post).should be_false
     ability = Ability.new(User.new(admin: false))
     ability.can?(:hack, post).should be_true

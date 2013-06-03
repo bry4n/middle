@@ -25,11 +25,8 @@ module Conduct
     def can(action, subject, *args, &block)
       options = args.extract_options!
       block = args.pop if args.last.kind_of?(Proc)
-      rules << Rule.new(action, subject, options, &block)
-    end
-
-    def rules
-      @@rules ||= []
+      rule = Rule.new(action, subject, options, &block)
+      define_method "_conduct_#{rule.name}", -> { rule }
     end
 
   end
@@ -38,17 +35,18 @@ module Conduct
     @current_user
   end
 
-  def rules
-    @rules ||= self.class.rules
-  end
-
   def initialize(user)
     @current_user = self.class.current_user = user
   end
 
   def can?(action, subject, options = {})
-    rule = find_rule_for(action, subject)
-    return false unless rule
+    method = find_method_for(action, subject)
+#    return false unless method
+    unless method
+      puts "#{method_name(action, subject)}: false"
+      return false
+    end
+    rule = send(method_name(action, subject))
     rule.call(subject, options)
   end
 
@@ -58,10 +56,29 @@ module Conduct
 
   private
 
-  def find_rule_for(action, subject)
-    rules.select do |rule|
-      rule.match?(action, subject)
-    end.first
+  def find_method_for(action, subject)
+    case true
+    when respond_to?(method_name(action, subject)) then method_name(action, subject)
+    when respond_to?("_conduct_#{action}_all") then "_conduct_#{action}_all"
+    else false
+    end
+  end
+
+  def method_name(action, subject)
+    original_subject = original_class_name(subject)
+    if subject.respond_to?(:to_a)
+      "_conduct_#{action}_#{original_subject.to_s.downcase}_collection"
+    else
+      "_conduct_#{action}_#{original_subject.to_s.downcase}"
+    end
+  end
+
+  def original_class_name(subject)
+    unless subject.respond_to?(:ancestors)
+      subject.class.ancestors.first
+    else
+      subject.ancestors.first
+    end
   end
 
 end

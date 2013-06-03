@@ -9,7 +9,12 @@ require 'pp'
 
 class User < MockClass
 
-  property :admin, default: true
+  attr_accessor :admin
+
+  def initialize(*args)
+    super
+    @admin = true
+  end
 
   def admin?
     self.admin == true
