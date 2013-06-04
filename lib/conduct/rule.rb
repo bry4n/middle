@@ -13,25 +13,10 @@ module Conduct
       @conditions = @collection && @block.present? || false
       @result     = nil
       if collection?
-        @name       = "#{action}_#{subject.to_s.downcase}_collection"
+        @name   = "#{action}_#{subject.to_s.downcase}_collection"
       else
-        @name       = "#{action}_#{subject.to_s.downcase}"
+        @name   = "#{action}_#{subject.to_s.downcase}"
       end
-    end
-
-    def match?(action, obj)
-      return false unless self.action == action
-      raise "The subject is not collection!" if collection? && !obj.respond_to?(:to_a)
-      if collection?
-        obj.respond_to?(:to_a)
-      else
-        obj.kind_of?(subject) rescue all?
-      end
-    end
-
-    def all?
-      subject.kind_of?(Symbol) && subject == :all ||
-      subject.kind_of?(String) && subject == "all"
     end
 
     def call(obj, opts = {})
