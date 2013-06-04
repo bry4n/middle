@@ -54,12 +54,13 @@ class UserPolicy
     @current_user.admin?
   end
 
-  500.times do |i|
-    define_method "manage_#{i}?" do
-      @user.admin?
-    end
-  end
+end
 
+500.times do |i|
+  eval <<-EOF
+    class User#{i} < User; end
+    class User#{i}Policy < UserPolicy; end
+  EOF
 end
 
 # conduct
@@ -80,7 +81,7 @@ class AbilityConduct
 end
 
 Benchmark.bm(25) do |b|
-
+  range = (1..400).to_a
   b.report("CanCan") do
     100_000.times do
       AbilityCanCan.new(User.new).can?(:manage, User.new)
@@ -88,14 +89,14 @@ Benchmark.bm(25) do |b|
   end
 
   b.report("Pundit") do
-    100_000.times do
-      AbilityPundit.new.policy(User.new).manage?
+    100_000.times do |i|
+      AbilityPundit.new.policy("User#{range.sample}".constantize.new).manage?
     end
   end
 
   b.report("Conduct") do
-    100_000.times do
-      AbilityConduct.new(User.new).can?(:manage, User.new)
+    100_000.times do |i|
+      AbilityConduct.new("User#{range.sample}".constantize.new).can?(:manage, User.new)
     end
   end
 
