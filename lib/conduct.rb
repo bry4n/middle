@@ -2,8 +2,7 @@ $:.unshift "lib"
 
 unless defined?(ActiveSupport)
   require 'active_support/concern'
-  require 'active_support/core_ext/class'
-  require 'active_support/core_ext/object'
+  require 'active_support/core_ext/array'
 end
 
 require "conduct/rule"
