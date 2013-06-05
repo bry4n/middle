@@ -46,7 +46,7 @@ describe Conduct do
     user_1 = User.new(admin: false)
     user_1.admin = false
     ability = Ability.new(user_1)
-    ability.can?(:hack, post).should be_true
+    ability.can?(:hack, User.create).should be_true
   end
 
   it "should throw error" do
