@@ -58,9 +58,4 @@ describe Conduct do
     ability.can?(:delete, posts).should be_true
   end
 
-  it "should raise if collection is enabled and condition is empty" do
-    posts = ([Post.create] * 5)
-    expect { ability.can?(:raise, posts) }.to raise_error(Exception)
-  end
-
 end
