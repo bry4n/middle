@@ -28,7 +28,7 @@ module Conduct
     def can(action, subject, *args, &block)
       options = args.extract_options!
       block = args.pop if args.last.kind_of?(Proc)
-      define_rule(name, subject, options, &block)
+      define_rule(action, subject, options, &block)
     end
 
     private
