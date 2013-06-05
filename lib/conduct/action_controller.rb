@@ -2,6 +2,10 @@ module Conduct
   module ActionController
     module Helpers
 
+      def ability_object(user)
+        @ability ||= Ability.new(user)
+      end
+
       def current_ability
         @ability ||= Ability.new(current_user)
       end
@@ -21,6 +25,6 @@ end
 if defined? ActionController::Base
   ActionController::Base.class_eval do
     include Conduct::ActionController::Helpers
-    helper_method :can?, :cannot?, :current_ability
+    helper_method :can?, :cannot?, :current_ability, :ability_object
   end
 end

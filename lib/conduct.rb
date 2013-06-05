@@ -47,10 +47,10 @@ module Conduct
   end
 
   def can?(action, subject, options = {})
-    name = method_name(action, subject)
+    name = build_name_for(action, subject)
     rule = rules[name] || rules["#{action}_all"]
     return false unless rule
-    rule.call(subject, options)
+    rule.result(subject, options)
   end
 
   def cannot?(*args)
@@ -59,17 +59,17 @@ module Conduct
 
   private
 
-  def method_name(action, subject)
-    original_subject = original_class_name(subject)
+  def build_name_for(action, subject)
+    _subject = find_class(subject)
     if subject.respond_to?(:to_a)
-      "#{action}_#{original_subject.to_s.downcase}_collection"
+      "#{action}_#{_subject.to_s.downcase}_collection"
     else
-      "#{action}_#{original_subject.to_s.downcase}"
+      "#{action}_#{_subject.to_s.downcase}"
     end
   end
 
-  def original_class_name(subject)
-    return original_class_name(subject.first) if subject.is_a?(Array)
+  def find_class(subject)
+    return find_class(subject.first) if subject.is_a?(Array)
     if subject.is_a?(Class)
       subject
     else
