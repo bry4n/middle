@@ -28,8 +28,21 @@ module Conduct
     def can(action, subject, *args, &block)
       options = args.extract_options!
       block = args.pop if args.last.kind_of?(Proc)
-      rule = Rule.new(action, subject, options, &block)
-      rules[rule.name] = rule
+      define_rule(name, subject, options, &block)
+    end
+
+    private
+
+    def define_rule(action, subject, options, &block)
+      if action.is_a?(Array)
+        action.each do |name|
+          rule = Rule.new(name, subject, options, &block)
+          rules[rule.name] = rule
+        end
+      else
+        rule = Rule.new(action, subject, options, &block)
+        rules[rule.name] = rule
+      end
     end
 
   end
