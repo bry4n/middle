@@ -9,19 +9,15 @@ module Conduct
       @subject    = subject
       @options    = options
       @block      = block
-      @collection = options[:collection].presence || false
-      @conditions = @collection && @block.present? || false
       @value      = nil
       @name       = "#{action}_#{subject.to_s.downcase}"
-      @name       = [@name, "_collection"].join if collection?
     end
 
-    def result(obj, opts = {})
-      if collection?
-        raise "Must use block/proc when collection is used" unless conditions?
-        @value = obj.to_a.all? {|o| block_call(o, opts) }
+    def result(object, opts = {})
+      if collection?(object)
+        @value = object.to_a.all? {|obj| block_call(obj, opts) }
       else
-        @value = block_call(obj, opts)
+        @value = block_call(object, opts)
       end
       raise "Result value is not a boolean type" unless boolean_value?
       @value
@@ -35,8 +31,8 @@ module Conduct
       value.kind_of?(TrueClass) || value.kind_of?(FalseClass)
     end
 
-    def collection?
-      @collection
+    def collection?(obj)
+      obj.respond_to?(:to_a)
     end
 
     def conditions?

@@ -61,20 +61,14 @@ module Conduct
 
   def build_name_for(action, subject)
     _subject = find_class(subject)
-    if subject.respond_to?(:to_a)
-      "#{action}_#{_subject.to_s.downcase}_collection"
-    else
-      "#{action}_#{_subject.to_s.downcase}"
-    end
+    "#{action}_#{_subject.to_s.downcase}"
   end
 
   def find_class(subject)
+    return subject.model_name if subject.respond_to?(:model_name)
+    return subject.class.model_name if subject.class.respond_to?(:model_name)
     return find_class(subject.first) if subject.is_a?(Array)
-    if subject.is_a?(Class)
-      subject
-    else
-      subject.class
-    end
+    subject.is_a?(Class) ? subject : subject.class
   end
 
 end

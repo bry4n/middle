@@ -63,10 +63,10 @@ class Ability
     post.id
   end
 
-  can :delete, Post, collection: true do |post|
+  can :delete, Post do |post|
     post.persisted?
   end
 
-  can :raise, Post, collection: true
+  can :raise, Post
 
 end
