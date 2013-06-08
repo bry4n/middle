@@ -1,4 +1,5 @@
 require 'rspec/core/rake_task'
+require 'reek/rake/task'
 
 task :default => :spec
 RSpec::Core::RakeTask.new(:spec)
@@ -41,4 +42,30 @@ namespace :gem do
     system("fury push pkg/*.gem")
   end
 
+end
+
+namespace :code do
+
+  desc "All"
+  task :all => [:cane, :flog, :reek]
+
+  desc "Reek"
+  task :reek do
+    system("reek lib/")
+  end
+
+  desc "Flog"
+  task :flog do
+    system("flog lib/")
+  end
+
+  desc "Cane"
+  task :cane do
+    system("cane lib/")
+  end
+
+  desc "tailor"
+  task :tailor do
+    system("tailor lib/")
+  end
 end
