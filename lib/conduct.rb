@@ -25,9 +25,24 @@ module Conduct
       @@rules ||= {}
     end
 
+    def actions
+      @@actions ||= {}
+    end
+
+    def define_action(*args)
+      options = args.extract_options!
+      options.each do |key, value|
+        actions[key] = value
+      end
+    end
+
     def can(action, subject, *args, &block)
       options = args.extract_options!
       block = args.pop if args.last.kind_of?(Proc)
+      if defined_action_exists?(action)
+        collection = fetch_action_from_collection(action)
+        collection.each {|name| define_rule(name, subject, options, &block) }
+      end
       define_rule(action, subject, options, &block)
     end
 
@@ -55,6 +70,16 @@ module Conduct
 
     def rule_exists?(name)
       rules[name].present?
+    end
+
+    def defined_action_exists?(action)
+      actions[action].present?
+    end
+
+    def fetch_action_from_collection(action)
+      list = actions[action]
+      raise "Please define action as collection" unless list.is_a?(Array)
+      list
     end
 
   end

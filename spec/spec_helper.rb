@@ -39,7 +39,10 @@ end
 
 class Ability
 
+
   include Conduct
+
+  define_action read: [:index, :show]
 
   include UserPolicies
 

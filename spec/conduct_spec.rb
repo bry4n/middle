@@ -70,4 +70,33 @@ describe Conduct do
     }.to raise_error
   end
 
+  context "define_action" do
+
+    describe "should have defined actions" do
+
+      class Example
+        include Conduct
+        define_action :read => [:index, :show]
+        can :read, User do |user|
+          true
+        end
+      end
+
+      it "should have three rules" do
+        example = Example.new(user)
+        example.rules.keys.should include("read_user")
+        example.can?(:read, User.new).should be_true
+        example.can?(:index, User.new).should be_true
+        example.can?(:show, User.new).should be_true
+      end
+
+      it "should have :read rule" do
+        example = Example.new(user)
+        example.rules["read_user"].should be_present
+      end
+
+    end
+
+  end
+
 end
