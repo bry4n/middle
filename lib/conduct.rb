@@ -37,12 +37,24 @@ module Conduct
       if action.is_a?(Array)
         action.each do |name|
           rule = Rule.new(name, subject, options, &block)
-          rules[rule.name] = rule
+          if rule_exists?(rule.name)
+            raise "Rule action #{action} is already existed. Please use different action name."
+          else
+            rules[rule.name] = rules
+          end
         end
       else
         rule = Rule.new(action, subject, options, &block)
-        rules[rule.name] = rule
+        if rule_exists?(rule.name)
+          raise "Rule action #{action} is already existed. Please use different action name."
+        else
+          rules[rule.name] = rule
+        end
       end
+    end
+
+    def rule_exists?(name)
+      rules[name].present?
     end
 
   end
