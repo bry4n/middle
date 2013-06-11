@@ -37,7 +37,7 @@ describe Conduct do
   end
 
   it "can manage all" do
-    ability.can?(:manage, User.new)
+    ability.can?(:manage, User.new).should be_true
   end
 
   it "can hack anything" do
