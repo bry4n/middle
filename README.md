@@ -44,10 +44,14 @@ class Ability
 
   include PostAbility
 
-  can :comment, Post, :user_post_comment?
+  can :comment, Post, :create_comment?
 
-  def can_user_post_comment?
+  can :create, Comment, do |comment|
     false
+  end
+
+  def create_comment?(post)
+    can? :create, post.comments.new
   end
 
 end
