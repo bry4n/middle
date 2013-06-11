@@ -44,6 +44,12 @@ class Ability
 
   include PostAbility
 
+  can :comment, Post, :user_post_comment?
+
+  def can_user_post_comment?
+    false
+  end
+
 end
 
 ```
