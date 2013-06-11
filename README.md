@@ -1,7 +1,7 @@
 Conduct - A lightweight authorization
 ---
 
-This is work in progress.
+This is work in progress. README will be updated/improved when this is completed.
 
 ### Examples:
 
@@ -46,6 +46,29 @@ class Ability
 
 end
 
+```
+
+**app/controllers/posts_controller.rb**
+
+```ruby
+class PostsController < ApplicationController
+  before_filter :authorize_ability! only: [:new, :create]
+
+  def index
+    if authorize_ability
+      @posts = @user.posts
+    else
+      @posts = @user.posts.public
+    end
+  end
+
+  def edit
+    redirect_to root_url unless can?(:update, @post)
+  end
+
+  ...
+
+end
 ```
 
 **app/views/posts/index.html.erb**

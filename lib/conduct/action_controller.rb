@@ -18,6 +18,28 @@ module Conduct
         current_ability.cannot?(*args)
       end
 
+      # if authorize_ability
+      #   @posts = current_user.posts
+      # else
+      #   @posts = @user.posts.public
+      # end
+      def authorize_ability
+        return unless defined?(controller_name) || params[:action].present?
+        klass = _classify_controller_name
+        current_ability.can?(params[:action], klass)
+      end
+
+      # before_action :authorize_ability!
+      def authorize_ability!
+        raise "Access Denied" unless authorize_ability
+      end
+
+      private
+
+      def _classify_controller_name
+        controller_name.classify.constantize
+      end
+
     end
   end
 end
