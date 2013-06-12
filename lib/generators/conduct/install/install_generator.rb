@@ -6,7 +6,7 @@ module Conduct
       desc "Creates an ability to your application"
 
       def copy_ability
-        template 'abiilty.rb', 'app/abilities/ability.rb'
+        template 'ability.rb', 'app/abilities/ability.rb'
       end
 
     end
