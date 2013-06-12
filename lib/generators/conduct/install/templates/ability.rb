@@ -15,6 +15,6 @@ class Ability
     false
   end
 
-  #include PostActivity
+  #include ExampleAbility
 
 end
