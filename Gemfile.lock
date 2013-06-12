@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    conduct (0.1.2)
+    conduct (0.1.8)
       activesupport
 
 GEM
