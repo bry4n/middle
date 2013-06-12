@@ -58,18 +58,6 @@ describe Conduct do
     ability.can?(:delete, posts).should be_true
   end
 
-  it "should raise about duplicated rule" do
-
-    expect {
-      class Example
-        include Conduct
-
-        can :edit, User
-        can [:edit, :read], User
-      end
-    }.to raise_error
-  end
-
   context "define_action" do
 
     describe "should have defined actions" do

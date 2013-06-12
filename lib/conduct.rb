@@ -61,9 +61,9 @@ module Conduct
     end
 
     def add_rule(name, rule)
-      raise "Rule action '#{name}' is already defined." if
-        rule_exists?(rule.name)
-      rules[name] = rule
+      unless rule_exists?(rule.name)
+        rules[name] = rule
+      end
     end
 
     def rule_exists?(name)
