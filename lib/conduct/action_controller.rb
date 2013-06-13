@@ -26,7 +26,7 @@ module Conduct
       def authorize_ability
         return unless defined?(controller_name) || params[:action].present?
         klass = _classify_controller_name
-        current_ability.can?(params[:action], klass)
+        current_ability.can?(params[:action], klass.new)
       end
 
       # before_action :authorize_ability!
@@ -48,5 +48,6 @@ if defined? ActionController::Base
   ActionController::Base.class_eval do
     include Conduct::ActionController::Helpers
     helper_method :can?, :cannot?, :current_ability, :ability_object
+    hide_action :authorize_ability, :authorize_ability!
   end
 end

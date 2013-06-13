@@ -49,10 +49,16 @@ module Conduct
     private
 
     def define_rule(action, subject, options, &block)
-      if action.is_a?(Array)
+      if defined_action_exists?(action)
+        collection = fetch_action_from_collection(action)
+        collection.each do |name|
+          rule = Rule.new(name, subject, options, &block)
+          add_rule(rule.name, rule)
+        end
+      elsif action.is_a?(Array)
         action.each do |name|
           rule = Rule.new(name, subject, options, &block)
-          add_rule(name, rule)
+          add_rule(rule.name, rule)
         end
       else
         rule = Rule.new(action, subject, options, &block)
