@@ -6,7 +6,6 @@ unless defined?(ActiveSupport)
 end
 
 require "conduct/rule"
-require "conduct/action_controller"
 
 module Conduct
   extend ActiveSupport::Concern
@@ -50,11 +49,7 @@ module Conduct
 
     def define_rule(action, subject, options, &block)
       if defined_action_exists?(action)
-        collection = fetch_action_from_collection(action)
-        collection.each do |name|
-          rule = Rule.new(name, subject, options, &block)
-          add_rule(rule.name, rule)
-        end
+        add_rule_for_defined_action(action, subject, options, &block)
       end
       if action.is_a?(Array)
         action.each do |name|
@@ -70,6 +65,14 @@ module Conduct
     def add_rule(name, rule)
       unless rule_exists?(rule.name)
         rules[name] = rule
+      end
+    end
+
+    def add_rule_for_defined_action(action, subject, options, &block)
+      collection = fetch_action_from_collection(action)
+      collection.each do |name|
+        rule = Rule.new(name, subject, options, &block)
+        add_rule(rule.name, rule)
       end
     end
 
@@ -128,3 +131,6 @@ module Conduct
 
 end
 
+if defined?(ActionController)
+  require "conduct/action_controller"
+end
