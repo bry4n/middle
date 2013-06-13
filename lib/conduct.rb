@@ -55,7 +55,8 @@ module Conduct
           rule = Rule.new(name, subject, options, &block)
           add_rule(rule.name, rule)
         end
-      elsif action.is_a?(Array)
+      end
+      if action.is_a?(Array)
         action.each do |name|
           rule = Rule.new(name, subject, options, &block)
           add_rule(rule.name, rule)
