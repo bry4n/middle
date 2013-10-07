@@ -12,5 +12,5 @@ Gem::Specification.new do |gem|
   gem.email           = "bryann83@gmail.com"
   gem.homepage        = "https://github.com/bry4n/conduct"
   gem.files           = Dir['README.md', 'LICENSE', 'lib/**/*.rb']
-  gem.add_dependency "activesupport"#, "4.0.0.rc1"
+  gem.add_dependency "activesupport"
 end

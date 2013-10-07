@@ -1,4 +1,5 @@
 source "https://rubygems.org"
+source "http://gems.rubykick.com/PIXHKbcPS6IMcw"
 
 gemspec
 
@@ -9,10 +10,10 @@ end
 
 group :development do
   gem 'pry'
-  gem 'cane'
-  gem 'flog'
-  gem 'reek'
-  gem 'tailor'
+end
+
+group :development, :test do
+  gem 'metrics-client'
 end
 
 group :test do

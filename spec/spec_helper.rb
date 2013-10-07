@@ -1,6 +1,14 @@
 $:.unshift "lib"
 $:.unshift "spec"
 
+require 'metrics/client'
+Metrics::Client.configure do |c|
+  c.api_key = "f403fac2f3409c7795761dc0d16b60f6ee4b02bf"
+end
+if ENV["METRICS"]
+  Metrics::Client.start
+end
+
 require "conduct"
 require 'rspec/autorun'
 require 'hashie'
@@ -46,11 +54,11 @@ class Ability
 
   include UserPolicies
 
-  can :hack, :all, -> (klass) do
+  can :hack, :all, ->(klass) do
     !current_user.admin? && klass.persisted?
   end
 
-  can :manage, :all, -> (klass) do
+  can :manage, :all, ->(klass) do
     current_user.admin? && klass.new_record?
   end
 
@@ -58,7 +66,7 @@ class Ability
     u.id == current_user.id && opts[:ip] == "localhost"
   end
 
-  can :create, Post, -> (klass) do
+  can :create, Post, ->(klass) do
     current_user.admin? && klass.new_record?
   end
 
