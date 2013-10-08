@@ -6,7 +6,7 @@ PATH
 
 GEM
   remote: https://rubygems.org/
-  remote: http://gems.rubykick.com/PIXHKbcPS6IMcw/
+  remote: http://gems.rubykick.com/q22leu5QlzpIsA/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
