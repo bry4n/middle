@@ -3,6 +3,7 @@ Conduct - A lightweight authorization
 
 This is work in progress. README will be updated/improved when this is completed.
 
+
 ### Examples:
 
 **app/abilities/post_ability.rb**
