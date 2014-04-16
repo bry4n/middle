@@ -131,6 +131,6 @@ module Conduct
 
 end
 
-if defined?(ActionController)
+if defined?(Rails)
   require "conduct/action_controller"
 end
