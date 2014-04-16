@@ -1,5 +1,5 @@
 module Conduct
-  module ActionController
+  module Rails
     module Helpers
 
       def ability_object(user)
@@ -44,9 +44,9 @@ module Conduct
   end
 end
 
-if defined? ActionController::Base
+if defined?(ActionController::Base)
   ActionController::Base.class_eval do
-    include Conduct::ActionController::Helpers
+    include Conduct::Rails::Helpers
     helper_method :can?, :cannot?, :current_ability, :ability_object
     hide_action :authorize_ability, :authorize_ability!
   end

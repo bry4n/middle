@@ -131,6 +131,4 @@ module Conduct
 
 end
 
-if defined?(Rails)
-  require "conduct/action_controller"
-end
+require "conduct/rails" if defined?(Rails)
