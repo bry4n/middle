@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-source "http://gems.rubykick.com/q22leu5QlzpIsA"
+#source "http://gems.rubykick.com/q22leu5QlzpIsA"
 
 gemspec
 
@@ -10,10 +10,6 @@ end
 
 group :development do
   gem 'pry'
-end
-
-group :development, :test do
-  gem 'metrics-client'
 end
 
 group :test do

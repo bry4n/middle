@@ -1,14 +1,6 @@
 $:.unshift "lib"
 $:.unshift "spec"
 
-require 'metrics/client'
-Metrics::Client.configure do |c|
-  c.api_key = "f403fac2f3409c7795761dc0d16b60f6ee4b02bf"
-end
-if ENV["METRICS"]
-  Metrics::Client.start
-end
-
 require "conduct"
 require 'rspec/autorun'
 require 'hashie'
