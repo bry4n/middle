@@ -31,7 +31,7 @@ module Conduct
 
       # before_action :authorize_ability!
       def authorize_ability!
-        raise "Access Denied" unless authorize_ability
+        fail 'Access Denied' unless authorize_ability
       end
 
       private

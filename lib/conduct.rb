@@ -1,31 +1,25 @@
-$:.unshift "lib"
+$LOAD_PATH.unshift 'lib'
 
 unless defined?(ActiveSupport)
   require 'active_support/concern'
   require 'active_support/core_ext/array'
 end
 
-require "conduct/rule"
+require 'conduct/rule'
 
 module Conduct
   extend ActiveSupport::Concern
 
   module ClassMethods
 
-    def current_user
-      @@current_user
-    end
-
-    def current_user=(user)
-      @@current_user = user
-    end
+    attr_accessor :current_user
 
     def rules
-      @@rules ||= {}
+      @rules ||= {}
     end
 
     def actions
-      @@actions ||= {}
+      @actions ||= {}
     end
 
     def define_action(*args)
@@ -40,7 +34,7 @@ module Conduct
       block = args.pop if args.last.kind_of?(Proc)
       if defined_action_exists?(action)
         collection = fetch_action_from_collection(action)
-        collection.each {|name| define_rule(name, subject, options, &block) }
+        collection.each { |name| define_rule(name, subject, options, &block) }
       end
       define_rule(action, subject, options, &block)
     end
@@ -63,9 +57,7 @@ module Conduct
     end
 
     def add_rule(name, rule)
-      unless rule_exists?(rule.name)
-        rules[name] = rule
-      end
+      rules[name] = rule unless rule_exists?(rule.name)
     end
 
     def add_rule_for_defined_action(action, subject, options, &block)
@@ -86,15 +78,13 @@ module Conduct
 
     def fetch_action_from_collection(action)
       list = actions[action]
-      raise "Please define action as collection" unless list.is_a?(Array)
+      fail 'Please define action as collection' unless list.is_a?(Array)
       list
     end
 
   end
 
-  def current_user
-    @current_user
-  end
+  attr_reader :current_user
 
   def initialize(user)
     @current_user = self.class.current_user = user
@@ -118,8 +108,8 @@ module Conduct
   private
 
   def build_name_for(action, subject)
-    _subject = find_class(subject)
-    "#{action}_#{_subject.to_s.downcase}"
+    subject = find_class(subject)
+    "#{action}_#{subject.to_s.downcase}"
   end
 
   def find_class(subject)
@@ -131,4 +121,4 @@ module Conduct
 
 end
 
-require "conduct/rails" if defined?(Rails)
+require 'conduct/rails' if defined?(Rails)

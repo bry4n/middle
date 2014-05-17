@@ -15,11 +15,11 @@ module Conduct
 
     def result(object, opts = {})
       if object.respond_to?(:to_a)
-        @value = object.to_a.all? {|obj| block_call(obj, opts) }
+        @value = object.to_a.all? { |obj| block_call(obj, opts) }
       else
         @value = block_call(object, opts)
       end
-      raise "Result value is not a boolean type" unless boolean_value?
+      fail 'Result value is not a boolean type' unless boolean_value?
       @value
     end
 

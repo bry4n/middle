@@ -1,7 +1,17 @@
+require 'bundler/setup'
+require 'bundler/gem_tasks'
+require 'rubygems/package_task'
 require 'rspec/core/rake_task'
-require 'reek/rake/task'
+require 'rake/clean'
 
-task :default => :spec
+gem_spec = Gem::Specification.load("conduct.gemspec")
+
+Gem::PackageTask.new(gem_spec) do |pkg|
+  pkg.need_zip = true
+  pkg.need_tar = true
+end
+
+task :default => [:spec]
 RSpec::Core::RakeTask.new(:spec)
 
 desc "Generate Benchmark report"
@@ -14,58 +24,7 @@ task :pry do
   system("pry -r bundler/setup -r ./lib/conduct")
 end
 
-namespace :git do
-  desc "Push to master"
-  task :push do
-    system("git push origin master")
-  end
-end
-
-namespace :gem do
-  desc "Build gem"
-  task :build => [:clean, :package]
-
-  desc "Package gem"
-  task :package do
-    system("gem build conduct.gemspec")
-    system("mkdir -p pkg")
-    system("mv *.gem pkg/")
-  end
-
-  desc "Clean up"
-  task :clean do
-    system("rm -rf pkg/")
-  end
-
-  desc "Publish gem to gemfury"
-  task :fury do
-    system("fury push pkg/*.gem")
-  end
-
-end
-
-namespace :code do
-
-  desc "All"
-  task :all => [:cane, :flog, :reek]
-
-  desc "Reek"
-  task :reek do
-    system("reek lib/")
-  end
-
-  desc "Flog"
-  task :flog do
-    system("flog lib/")
-  end
-
-  desc "Cane"
-  task :cane do
-    system("cane lib/")
-  end
-
-  desc "tailor"
-  task :tailor do
-    system("tailor lib/")
-  end
+desc "Rubocop"
+task :rubocop do
+  system("rubocop lib/conduct.rb lib/conduct/*.rb")
 end
