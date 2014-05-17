@@ -2,6 +2,7 @@ Middle - simple authorization
 ---
 ![image](Middle.png)
 
+[![Build Status](https://travis-ci.org/bry4n/middle.svg?branch=master)](https://travis-ci.org/bry4n/middle)
 
 ### Installation
 
