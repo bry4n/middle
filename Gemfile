@@ -16,3 +16,7 @@ group :test do
   gem "hashie"
   gem "rspec"
 end
+
+group :development, :test do
+  gem 'byebug'
+end

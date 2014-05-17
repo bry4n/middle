@@ -14,12 +14,20 @@ module Conduct
 
     attr_accessor :current_user
 
+    def current_user
+      @@current_user
+    end
+
+    def current_user=(user)
+      @@current_user = user
+    end
+
     def rules
-      @rules ||= {}
+      @@rules ||= {}
     end
 
     def actions
-      @actions ||= {}
+      @@actions ||= {}
     end
 
     def define_action(*args)
