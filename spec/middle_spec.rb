@@ -1,6 +1,6 @@
 require File.expand_path("../spec_helper",__FILE__)
 
-describe Conduct do
+describe Middle do
   let(:user) { User.new }
   let(:ability) { Ability.new(user) }
 
@@ -63,7 +63,7 @@ describe Conduct do
     describe "should have defined actions" do
 
       class Example
-        include Conduct
+        include Middle
         define_action :read => [:index, :show]
         can :read, User do |user|
           true

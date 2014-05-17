@@ -1,4 +1,4 @@
-module Conduct
+module Middle
   module Rails
     module Helpers
 
@@ -46,7 +46,7 @@ end
 
 if defined?(ActionController::Base)
   ActionController::Base.class_eval do
-    include Conduct::Rails::Helpers
+    include Middle::Rails::Helpers
     helper_method :can?, :cannot?, :current_ability, :ability_object
     hide_action :authorize_ability, :authorize_ability!
   end

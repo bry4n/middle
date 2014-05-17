@@ -1,6 +1,6 @@
 class Ability
 
-  include Conduct
+  include Middle
 
   define_action create: [:new, :create]
   define_action read:   [:index, :show]

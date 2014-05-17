@@ -1,4 +1,4 @@
-module Conduct
+module Middle
   module Generators
     class AbilityGenerator < ::Rails::Generators::NamedBase
       source_root File.expand_path(File.join(File.dirname(__FILE__), 'templates'))
@@ -9,7 +9,7 @@ module Conduct
 
       def create_ability
         template 'ability_module.rb', File.join('app/abilities', class_path, "#{file_name}_ability.rb")
-        inject_into_file 'app/abilities/ability.rb', after: "include Conduct\n" do
+        inject_into_file 'app/abilities/ability.rb', after: "include Middle\n" do
           "\n  include #{class_name}Activity\n"
         end
 

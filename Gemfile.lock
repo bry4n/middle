@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    conduct (0.1.14)
+    middle (0.1.0)
       activesupport
 
 GEM
@@ -128,8 +128,8 @@ PLATFORMS
 DEPENDENCIES
   byebug
   cancan
-  conduct!
   hashie
+  middle!
   pry
   pundit
   rspec

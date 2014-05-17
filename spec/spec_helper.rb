@@ -1,7 +1,7 @@
 $:.unshift "lib"
 $:.unshift "spec"
 
-require "conduct"
+require "middle"
 require 'rspec/autorun'
 require 'hashie'
 require 'mock_class'
@@ -29,7 +29,7 @@ class Company < MockClass; end
 
 module UserPolicies
 
-  include Conduct
+  include Middle
 
   can :test, Post do |post|
     current_user.admin?
@@ -40,7 +40,7 @@ end
 class Ability
 
 
-  include Conduct
+  include Middle
 
   define_action read: [:index, :show]
 

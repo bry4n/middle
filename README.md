@@ -1,17 +1,35 @@
-Conduct - A lightweight authorization
+Middle - simple authorization
 ---
+![image](Middle.png)
 
-This is work in progress. README will be updated/improved when this is completed.
+
+### Installation
+
+Gemfile
+
+```ruby
+gem "middle"
+```
+
+Command line interface
+
+```
+$ gem install middle
+```
+
+
+**Note** This is work in progress. README will be updated/improved when this is completed.
+
 
 
 ### Examples:
 
-**app/abilities/post_ability.rb**
+You can define rules in modules. 
 
 ```ruby
 module PostAbility
 
-  include Conduct
+  include Middle
 
   can :write, Post do |post|
     current_user.present? && post.new_record?
@@ -25,12 +43,12 @@ end
 
 ```
 
-**app/abilities/ability.rb**
+Define rules in Ability class
 
 ```ruby
 class Ability
 
-  include Conduct
+  include Middle
 
   define_action create: [:new, :create]
   define_action read:   [:index, :show]
@@ -59,22 +77,20 @@ end
 
 ```
 
-**app/controllers/posts_controller.rb**
+#### Rails
+
+
+Check for permission if **@user** is authorized to view all posts.
 
 ```ruby
 class PostsController < ApplicationController
-  before_filter :authorize_ability! only: [:new, :create]
 
   def index
-    if authorize_ability
+    if can?(:manage, @user.posts)
       @posts = @user.posts
     else
       @posts = @user.posts.public
     end
-  end
-
-  def edit
-    redirect_to root_url unless can?(:update, @post)
   end
 
   ...
@@ -82,10 +98,23 @@ class PostsController < ApplicationController
 end
 ```
 
-**app/views/posts/index.html.erb**
+Check for permission in views
 
 ```ruby
 <% if can?(:create, @post) %>
   <%= link_to "New Post", new_post_path %>
 <% end %>
 ```
+
+### Contributing
+
+If you wish to contribute to this project, please:
+
+* Fork this project on GitHub
+* If it involves code, please also write tests for it
+* Use named branch
+* Send a pull request
+
+### License
+
+Middle is licensed under the MIT license.

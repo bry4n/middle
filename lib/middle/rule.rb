@@ -1,4 +1,4 @@
-module Conduct
+module Middle
   class Rule
 
     attr_accessor :action, :subject, :options, :block

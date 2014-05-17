@@ -4,7 +4,7 @@ require 'rubygems/package_task'
 require 'rspec/core/rake_task'
 require 'rake/clean'
 
-gem_spec = Gem::Specification.load("conduct.gemspec")
+gem_spec = Gem::Specification.load("middle.gemspec")
 
 Gem::PackageTask.new(gem_spec) do |pkg|
   pkg.need_zip = true
@@ -21,10 +21,10 @@ end
 
 desc "Start IRB session"
 task :pry do
-  system("pry -r bundler/setup -r ./lib/conduct")
+  system("pry -r bundler/setup -r ./lib/middle")
 end
 
 desc "Rubocop"
 task :rubocop do
-  system("rubocop lib/conduct.rb lib/conduct/*.rb")
+  system("rubocop lib/middle.rb lib/middle/*.rb")
 end

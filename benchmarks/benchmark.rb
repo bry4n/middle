@@ -2,7 +2,7 @@ $:.unshift "../lib"
 
 require 'cancan'
 require 'pundit'
-require 'conduct'
+require 'middle'
 require 'benchmark'
 
 # mock class
@@ -63,10 +63,10 @@ end
   EOF
 end
 
-# conduct
-class AbilityConduct
+# middle
+class AbilityMiddle
 
-  include Conduct
+  include Middle
 
   can :manage, User do |u|
     current_user.admin?
@@ -94,9 +94,9 @@ Benchmark.bm(25) do |b|
     end
   end
 
-  b.report("Conduct") do
+  b.report("Middle") do
     100_000.times do |i|
-      AbilityConduct.new("User#{range.sample}".constantize.new).can?(:manage, User.new)
+      AbilityMiddle.new("User#{range.sample}".constantize.new).can?(:manage, User.new)
     end
   end
 

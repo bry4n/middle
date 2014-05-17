@@ -5,9 +5,9 @@ unless defined?(ActiveSupport)
   require 'active_support/core_ext/array'
 end
 
-require 'conduct/rule'
+require 'middle/rule'
 
-module Conduct
+module Middle
   extend ActiveSupport::Concern
 
   module ClassMethods
@@ -129,4 +129,4 @@ module Conduct
 
 end
 
-require 'conduct/rails' if defined?(Rails)
+require 'middle/rails' if defined?(Rails)
