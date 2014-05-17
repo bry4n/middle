@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-#source "http://gems.rubykick.com/q22leu5QlzpIsA"
 
 gemspec
 
