@@ -25,25 +25,6 @@ $ gem install middle
 
 ### Examples:
 
-You can define rules in modules. 
-
-```ruby
-module PostAbility
-
-  include Middle
-
-  can :write, Post do |post|
-    current_user.present? && post.new_record?
-  end
-
-  can :read, Post do |post|
-    post.user == current_user
-  end
-
-end
-
-```
-
 Define rules in Ability class
 
 ```ruby
@@ -62,13 +43,11 @@ class Ability
     current_user.present? && current_user.admin?
   end
 
-  include PostAbility
+  can :manage, Post do |post|
+    post.member?(current_user)
+  end
 
   can :comment, Post, :create_comment?
-
-  can :create, Comment, do |comment|
-    false
-  end
 
   def create_comment?(post)
     can? :create, post.comments.new
@@ -81,13 +60,13 @@ end
 #### Rails
 
 
-Check for permission if **@user** is authorized to view all posts.
+Check for permission if **current_user** is authorized to view user's all posts.
 
 ```ruby
 class PostsController < ApplicationController
 
   def index
-    if can?(:manage, @user.posts)
+    if can?(:read, @user.posts)
       @posts = @user.posts
     else
       @posts = @user.posts.public
